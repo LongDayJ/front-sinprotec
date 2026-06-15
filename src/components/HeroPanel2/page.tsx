@@ -18,7 +18,7 @@ export default function HeroPanel2() {
             </Main>
 
             <PageFooter>
-                <FooterLeft>© 2026 Ministério da Saúde — *Setor* · SINPROTEC v1.0 · Todos os direitos reservados</FooterLeft>
+                <FooterLeft>© 2026 Ministério da Saúde — SAES / CGITEC · SInProTec v1.0 · Todos os direitos reservados</FooterLeft>
                 <FooterRight>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />

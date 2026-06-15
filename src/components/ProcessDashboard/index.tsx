@@ -7,55 +7,13 @@ const LS_KEY = 'ministerio_processes';
 
 import SummaryCard from "@/components/SummaryCard";
 import ProcessTable from "@/components/ProcessTable";
+import ProcessFilters from "./ProcessFilters";
 import {
-    ControlsCard, ControlsWrapper, MiniChip, MiniCount, MiniLabelFull, MiniLabelShort,
+    ControlsWrapper, MiniChip, MiniCount, MiniLabelFull, MiniLabelShort,
     MiniSummaryBar, PageWrapper, SummaryRow,
 } from "./styled";
-import {
-    ClearButton,
-    FilterActiveBadge,
-    FilterChevron,
-    FilterChip,
-    FilterColumn,
-    FilterColumnLabel,
-    FilterPanel,
-    FilterPanelInner,
-    FilterColumnsRow,
-    FilterToggleBtn,
-    ChipsWrap,
-    ChipDot,
-    ChipCheck,
-    SearchAndFilterRow,
-    SearchInput,
-    SearchWrapper,
-    RightControls,
-} from "@/components/ProjectCards/styled";
 
 /* ─── Ícones ────────────────────────────────────────────── */
-
-function IconSearch() {
-    return (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
-        </svg>
-    );
-}
-
-function IconFilter() {
-    return (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="4" y1="6" x2="20" y2="6" /><line x1="8" y1="12" x2="16" y2="12" /><line x1="11" y1="18" x2="13" y2="18" />
-        </svg>
-    );
-}
-
-function IconChevron() {
-    return (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="6 9 12 15 18 9" />
-        </svg>
-    );
-}
 
 function IconDatabase() {
     return (
@@ -94,24 +52,14 @@ function IconPlusCircle() {
     );
 }
 
-/* ─── Dados dos chips ───────────────────────────────────── */
-
-const STATUS_OPTIONS: { value: Process['status']; label: string; color: string }[] = [
-    { value: 'Finalizado',             label: 'Finalizado',             color: '#34a853' },
-    { value: 'Sobrestado',             label: 'Sobrestado',             color: '#f57c00' },
-    { value: 'Aguardando área técnica', label: 'Aguardando área técnica', color: '#1a73e8' },
-    { value: 'Área técnica retornou',   label: 'Área técnica retornou',   color: '#9c27b0' },
-];
-
-const TIPO_OPTIONS: { value: Process['tipo']; label: string; color: string }[] = [
-    { value: 'novo',        label: 'Novo',        color: '#34a853' },
-    { value: 'atualizacao', label: 'Atualização', color: '#1a73e8' },
-];
-
 /* ─── Utilidade ─────────────────────────────────────────── */
 
 function normalize(str: string) {
     return str.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+}
+
+function normalizeNup(str: string) {
+    return str.replace(/[.\-/]/g, '');
 }
 
 /* ─── Componente ────────────────────────────────────────── */
@@ -195,13 +143,13 @@ export default function ProcessDashboard() {
     const hasActiveFilters = activeFilterCount > 0;
 
     const filtered = useMemo(() => {
-        const qNup     = normalize(searchNup.trim());
+        const qNup     = searchNup.trim();
         const qAssunto = normalize(searchAssunto.trim());
         const qObs     = normalize(searchObs.trim());
         return processes.filter((p: Process) => {
             if (selectedStatuses.length && !selectedStatuses.includes(p.status)) return false;
             if (selectedTipos.length && !selectedTipos.includes(p.tipo)) return false;
-            if (qNup     && !normalize(p.nup).includes(qNup)) return false;
+            if (qNup     && !normalizeNup(p.nup).includes(normalizeNup(qNup))) return false;
             if (qAssunto && !normalize(p.assunto).includes(qAssunto)) return false;
             if (qObs     && !normalize(p.observacoes ?? '').includes(qObs)) return false;
             return true;
@@ -239,102 +187,23 @@ export default function ProcessDashboard() {
                     </MiniChip>
                 ))}
             </MiniSummaryBar>
-            <ControlsCard $filtersOpen={filtersOpen}>
-                <RightControls>
-                    <SearchAndFilterRow>
-                        <SearchWrapper>
-                            <IconSearch />
-                            <SearchInput
-                                placeholder="NUP..."
-                                value={searchNup}
-                                onChange={(e) => setSearchNup(e.target.value)}
-                            />
-                        </SearchWrapper>
-                        <SearchWrapper>
-                            <IconSearch />
-                            <SearchInput
-                                placeholder="Assunto..."
-                                value={searchAssunto}
-                                onChange={(e) => setSearchAssunto(e.target.value)}
-                            />
-                        </SearchWrapper>
-                        <SearchWrapper>
-                            <IconSearch />
-                            <SearchInput
-                                placeholder="Observações..."
-                                value={searchObs}
-                                onChange={(e) => setSearchObs(e.target.value)}
-                            />
-                        </SearchWrapper>
-
-                        <FilterToggleBtn
-                            $open={filtersOpen}
-                            $hasFilters={hasActiveFilters}
-                            onClick={() => setFiltersOpen((o) => !o)}
-                        >
-                            <IconFilter />
-                            Filtros
-                            {activeFilterCount > 0 && (
-                                <FilterActiveBadge>{activeFilterCount}</FilterActiveBadge>
-                            )}
-                            <FilterChevron $open={filtersOpen}>
-                                <IconChevron />
-                            </FilterChevron>
-                        </FilterToggleBtn>
-
-                        {hasActiveFilters && (
-                            <ClearButton onClick={clearFilters}>Limpar</ClearButton>
-                        )}
-                    </SearchAndFilterRow>
-                </RightControls>
-            </ControlsCard>
-
-            <FilterPanel $open={filtersOpen}>
-                <FilterPanelInner>
-                    <FilterColumnsRow>
-                        <FilterColumn>
-                            <FilterColumnLabel>Status</FilterColumnLabel>
-                            <ChipsWrap>
-                                {STATUS_OPTIONS.map((opt) => {
-                                    const active = selectedStatuses.includes(opt.value);
-                                    return (
-                                        <FilterChip
-                                            key={opt.value}
-                                            $active={active}
-                                            $color={opt.color}
-                                            onClick={() => toggleStatus(opt.value)}
-                                        >
-                                            <ChipDot $color={opt.color} />
-                                            {opt.label}
-                                            {active && <ChipCheck $active $color={opt.color}>✓</ChipCheck>}
-                                        </FilterChip>
-                                    );
-                                })}
-                            </ChipsWrap>
-                        </FilterColumn>
-
-                        <FilterColumn>
-                            <FilterColumnLabel>Tipo</FilterColumnLabel>
-                            <ChipsWrap>
-                                {TIPO_OPTIONS.map((opt) => {
-                                    const active = selectedTipos.includes(opt.value);
-                                    return (
-                                        <FilterChip
-                                            key={opt.value}
-                                            $active={active}
-                                            $color={opt.color}
-                                            onClick={() => toggleTipo(opt.value)}
-                                        >
-                                            <ChipCheck $active={active} $color={opt.color} />
-                                            {opt.label}
-                                        </FilterChip>
-                                    );
-                                })}
-                            </ChipsWrap>
-                        </FilterColumn>
-                    </FilterColumnsRow>
-                </FilterPanelInner>
-            </FilterPanel>
+            <ProcessFilters
+                searchNup={searchNup}
+                onSearchNupChange={setSearchNup}
+                searchAssunto={searchAssunto}
+                onSearchAssuntoChange={setSearchAssunto}
+                searchObs={searchObs}
+                onSearchObsChange={setSearchObs}
+                selectedStatuses={selectedStatuses}
+                onToggleStatus={toggleStatus}
+                selectedTipos={selectedTipos}
+                onToggleTipo={toggleTipo}
+                filtersOpen={filtersOpen}
+                onToggleFilters={() => setFiltersOpen((o) => !o)}
+                hasActiveFilters={hasActiveFilters}
+                activeFilterCount={activeFilterCount}
+                onClearFilters={clearFilters}
+            />
             </ControlsWrapper>
 
             <ProcessTable processes={filtered} onUpdate={updateProcess} onDelete={deleteProcess} />

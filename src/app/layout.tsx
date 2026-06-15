@@ -5,7 +5,7 @@ import Providers from "@/providers/Providers";
 const sora = Sora({ subsets: ["latin"], variable: "--font-sora", display: "swap" });
 
 export const metadata: Metadata = {
-    title: "SINPROTEC - Sistema de Informação de Protocolos e Tecnologias em Saúde",
+    title: "SInProTec - Sistema de Informação de Protocolos e Tecnologias em Saúde",
     description: "Descrição do projeto",
 };
 

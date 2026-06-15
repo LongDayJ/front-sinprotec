@@ -1,4 +1,32 @@
-import styled from "styled-components";
+import styled, { css, keyframes } from "styled-components";
+
+const slide = keyframes`
+    0%   { transform: translateX(-100%); }
+    100% { transform: translateX(400%); }
+`;
+
+export const LoadingBar = styled.div<{ $active: boolean }>`
+    position: relative;
+    width: 100%;
+    height: 3px;
+    background: ${({ theme }) => theme.colors.greenBackgroundLight};
+    overflow: hidden;
+    transition: opacity 0.2s;
+    opacity: ${({ $active }) => ($active ? 1 : 0)};
+
+    &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        width: 25%;
+        background: ${({ theme }) => theme.colors.greenBackground};
+        ${({ $active }) =>
+            $active &&
+            css`
+                animation: ${slide} 1s linear infinite;
+            `}
+    }
+`;
 
 export const Card = styled.div`
     width: 100%;
@@ -11,17 +39,17 @@ export const Card = styled.div`
 
 export const CardHeader = styled.div`
     background: ${({ theme }) => theme.colors.greenBackground};
-    padding: 2rem 2rem 1.8rem;
+    padding: clamp(1rem, 3dvh, 2rem) 2rem clamp(0.9rem, 2.5dvh, 1.8rem);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.75rem;
+    gap: clamp(0.35rem, 1dvh, 0.75rem);
     text-align: center;
 `;
 
 export const ShieldIcon = styled.div`
-    width: 3.2rem;
-    height: 3.2rem;
+    width: clamp(2.2rem, 4dvh, 3.2rem);
+    height: clamp(2.2rem, 4dvh, 3.2rem);
     border-radius: 50%;
     background: ${({ theme }) => theme.colors.greenTransparent};
     border: 2px solid rgba(255, 255, 255, 0.25);
@@ -31,8 +59,8 @@ export const ShieldIcon = styled.div`
     color: ${({ theme }) => theme.colors.text.strong};
 
     svg {
-        width: 1.6rem;
-        height: 1.6rem;
+        width: clamp(1.1rem, 2dvh, 1.6rem);
+        height: clamp(1.1rem, 2dvh, 1.6rem);
     }
 `;
 
@@ -52,10 +80,10 @@ export const CardSubtitle = styled.p`
 
 export const CardBody = styled.div`
     background: ${({ theme }) => theme.colors.white};
-    padding: 1.75rem 2rem 2rem;
+    padding: clamp(0.85rem, 2.5dvh, 1.75rem) 2rem clamp(0.85rem, 2.5dvh, 2rem);
     display: flex;
     flex-direction: column;
-    gap: 1.2rem;
+    gap: clamp(0.6rem, 1.5dvh, 1.2rem);
 `;
 
 export const OrgLabel = styled.p`
@@ -81,7 +109,7 @@ export const Divider = styled.hr`
 export const Form = styled.form`
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: clamp(0.5rem, 1.2dvh, 1rem);
 `;
 
 export const Field = styled.div`
@@ -116,7 +144,7 @@ export const InputWrapper = styled.div`
 
 export const Input = styled.input`
     width: 100%;
-    padding: 0.85rem 1rem 0.85rem 2.5rem;
+    padding: clamp(0.55rem, 1.1dvh, 0.85rem) 1rem clamp(0.55rem, 1.1dvh, 0.85rem) 2.5rem;
     border-radius: 0.6rem;
     border: 1.5px solid ${({ theme }) => theme.colors.grayUltraLight};
     background: ${({ theme }) => theme.colors.grayLight};
@@ -138,7 +166,7 @@ export const Input = styled.input`
 
 export const SubmitButton = styled.button`
     width: 100%;
-    height: 3rem;
+    height: clamp(2.5rem, 4dvh, 3rem);
     border: none;
     border-radius: 0.7rem;
     background: ${({ theme }) => theme.colors.greenBackground};
@@ -180,7 +208,7 @@ export const WarningBox = styled.div`
     background: ${({ theme }) => theme.colors.yellowVibrantMoreOpaque};
     border: 1px solid ${({ theme }) => theme.colors.yellowVibrantOpaque};
     border-radius: 0.5rem;
-    padding: 0.7rem 0.9rem;
+    padding: clamp(0.5rem, 1dvh, 0.7rem) 0.9rem;
     display: flex;
     align-items: flex-start;
     gap: 0.6rem;

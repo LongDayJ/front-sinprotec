@@ -14,6 +14,7 @@ export const FooterContainer = styled.footer`
     color: ${({ theme }) => theme.colors.greenDark};
 
     border-top: 1px solid ${({ theme }) => theme.colors.greenBackground};
+    padding: 0 24px;
     @media (max-width: 768px) {
         width: 100dvw;
         height: 12dvh;

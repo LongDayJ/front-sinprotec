@@ -258,7 +258,7 @@ export const FormLabel = styled.label`
 const inputBase = `
     font-size: 0.85rem;
     color: #1e293b;
-    background: #f8fafc;
+    background: #fff;
     border: 1.5px solid #e2e8f0;
     border-radius: 8px;
     padding: 0.5rem 0.7rem;
@@ -267,6 +267,10 @@ const inputBase = `
     font-family: inherit;
     width: 100%;
     box-sizing: border-box;
+
+    &:hover:not(:focus) {
+        border-color: #94a3b8;
+    }
 
     &:focus {
         border-color: #1a73e8;
@@ -286,7 +290,7 @@ export const FormSelect = styled.select`
     background-position: right 0.6rem center;
     background-size: 14px;
     padding-right: 2rem;
-    background-color: #f8fafc;
+    background-color: #fff;
 `;
 
 export const FormTextarea = styled.textarea`

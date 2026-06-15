@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const PageWrapper = styled.div`
-    min-height: 100vh;
+    height: 100dvh;
     display: flex;
     flex-direction: column;
     background: ${({ theme }) => theme.colors.grayLight};
@@ -26,10 +26,12 @@ export const AlertBar = styled.div`
 
 export const Main = styled.main`
     flex: 1;
+    min-height: 0;
+    overflow-y: auto;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 2rem 1rem;
+    padding: clamp(0.5rem, 2.5dvh, 2rem) 1rem;
 `;
 
 export const PageFooter = styled.footer`

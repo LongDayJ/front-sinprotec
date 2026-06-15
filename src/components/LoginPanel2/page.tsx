@@ -17,6 +17,7 @@ import {
     Form,
     Input,
     InputWrapper,
+    LoadingBar,
     OrgLabel,
     ShieldIcon,
     SubmitButton,
@@ -51,6 +52,7 @@ export default function LoginPanel2() {
 
     return (
         <Card>
+            <LoadingBar $active={isLoading} />
             <CardHeader>
                 <ShieldIcon>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -58,7 +60,7 @@ export default function LoginPanel2() {
                     </svg>
                 </ShieldIcon>
 
-                <CardTitle>SINPROTEC</CardTitle>
+                <CardTitle>SInProTec</CardTitle>
 
                 <CardSubtitle>
                     Sistema de Informação de Protocolos
@@ -68,7 +70,7 @@ export default function LoginPanel2() {
 
             <CardBody>
                 <OrgLabel>
-                    MINISTÉRIO DA SAÚDE <span>— *Setor*</span>
+                    MINISTÉRIO DA SAÚDE <span>— SAES / CGITEC</span>
                 </OrgLabel>
 
                 <Divider />

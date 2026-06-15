@@ -7,7 +7,7 @@ import { FooterContainer, FooterLeft, FooterRight, ImageWrapper } from "./styled
 export default function Footer() {
     return (
         <FooterContainer>
-            <FooterLeft>© 2026 FRONT BASE - DECAN</FooterLeft>
+            <FooterLeft>© 2026 SInProTec - SAES / CGITEC</FooterLeft>
             <FooterRight>
                 <ImageWrapper>
                     <Image src="/especialistas.png" fill alt="Agora tem especialistas" style={{ objectFit: "contain" }} sizes="(max-width: 768px) 30vw, 15vw" />

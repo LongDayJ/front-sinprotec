@@ -98,8 +98,8 @@ const [remaining, setRemaining] = useState<number | null>(null);
             <TopbarBrand>
                 <TopbarLogo>MS</TopbarLogo>
                 <div>
-                    <TopbarName>SINPROTEC</TopbarName>
-                    <TopbarSub>base de código para o front-end</TopbarSub>
+                    <TopbarName>SInProTec</TopbarName>
+                    <TopbarSub>Sistema de Informação de Protocolos e Tecnologias em Saúde</TopbarSub>
                 </div>
             </TopbarBrand>
 
