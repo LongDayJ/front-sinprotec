@@ -98,3 +98,54 @@ export const EmptyRow = styled.tr`
         td { display: block; }
     }
 `;
+
+export const PaginationWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.65rem 1rem;
+    border-top: 1px solid #e2e8f0;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+
+    ${MOBILE} {
+        justify-content: center;
+    }
+`;
+
+export const PaginationInfo = styled.span`
+    font-size: 0.75rem;
+    color: #94a3b8;
+
+    ${MOBILE} { display: none; }
+`;
+
+export const PaginationControls = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+`;
+
+export const PageBtn = styled.button<{ $active?: boolean }>`
+    min-width: 30px;
+    height: 30px;
+    padding: 0 0.4rem;
+    border-radius: 6px;
+    border: 1.5px solid ${({ $active }) => ($active ? '#1a73e8' : '#e2e8f0')};
+    background: ${({ $active }) => ($active ? '#1a73e8' : '#fff')};
+    color: ${({ $active }) => ($active ? '#fff' : '#475569')};
+    font-size: 0.78rem;
+    font-weight: ${({ $active }) => ($active ? 700 : 400)};
+    cursor: pointer;
+    transition: background 0.12s, border-color 0.12s, color 0.12s;
+
+    &:hover:not(:disabled) {
+        background: ${({ $active }) => ($active ? '#1557b0' : '#f1f5f9')};
+        border-color: ${({ $active }) => ($active ? '#1557b0' : '#94a3b8')};
+    }
+
+    &:disabled {
+        opacity: 0.35;
+        cursor: not-allowed;
+    }
+`;

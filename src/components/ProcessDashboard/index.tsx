@@ -7,7 +7,8 @@ const LS_KEY = 'ministerio_processes';
 
 import SummaryCard from "@/components/SummaryCard";
 import ProcessTable from "@/components/ProcessTable";
-import ProcessFilters from "./ProcessFilters";
+import ProcessFilters from "@/components/ProcessFilters";
+import ProcessAddModal from "@/components/ProcessAddModal";
 import {
     ControlsWrapper, MiniChip, MiniCount, MiniLabelFull, MiniLabelShort,
     MiniSummaryBar, PageWrapper, SummaryRow,
@@ -72,7 +73,13 @@ export default function ProcessDashboard() {
     useEffect(() => {
         try {
             const stored = localStorage.getItem(LS_KEY);
-            if (stored) setProcesses(JSON.parse(stored) as Process[]);
+            if (!stored) return;
+            const parsed = JSON.parse(stored) as Process[];
+            const storedIds = new Set(parsed.map((p) => p.id));
+            const newItems = mockProcesses.filter((p) => !storedIds.has(p.id));
+            const merged = [...parsed, ...newItems];
+            if (newItems.length > 0) localStorage.setItem(LS_KEY, JSON.stringify(merged));
+            setProcesses(merged);
         } catch {
             // ignore
         }
@@ -101,6 +108,15 @@ export default function ProcessDashboard() {
     const [selectedStatuses, setSelectedStatuses] = useState<Process['status'][]>([]);
     const [selectedTipos, setSelectedTipos] = useState<Process['tipo'][]>([]);
     const [filtersOpen, setFiltersOpen] = useState(false);
+    const [addOpen,     setAddOpen]     = useState(false);
+
+    function addProcess(process: Process) {
+        setProcesses((prev) => {
+            const next = [process, ...prev];
+            localStorage.setItem(LS_KEY, JSON.stringify(next));
+            return next;
+        });
+    }
 
     function updateProcess(updated: Process) {
         setProcesses((prev) => {
@@ -203,7 +219,12 @@ export default function ProcessDashboard() {
                 hasActiveFilters={hasActiveFilters}
                 activeFilterCount={activeFilterCount}
                 onClearFilters={clearFilters}
+                onAdd={() => setAddOpen(true)}
             />
+
+            {addOpen && (
+                <ProcessAddModal onClose={() => setAddOpen(false)} onSave={addProcess} />
+            )}
             </ControlsWrapper>
 
             <ProcessTable processes={filtered} onUpdate={updateProcess} onDelete={deleteProcess} />

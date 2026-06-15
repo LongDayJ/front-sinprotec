@@ -61,7 +61,7 @@ export const MiniChip = styled.div<{ $color: string }>`
     border-left: 3px solid ${({ $color }) => $color};
     padding: 0.25rem 0.5rem;
     background: ${({ $color }) => $color}12;
-    border-radius: 0 4px 4px 0;
+    // border-radius: 0 4px 4px 0;
 `;
 
 export const MiniCount = styled.span<{ $color: string }>`

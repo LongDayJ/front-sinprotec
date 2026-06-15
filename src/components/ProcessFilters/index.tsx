@@ -1,7 +1,8 @@
 "use client";
 
-import { type Process } from "./mock";
-import { ControlsCard } from "./styled";
+import { type Process } from "@/components/ProcessDashboard/mock";
+import { ControlsCard } from "@/components/ProcessDashboard/styled";
+import { AddButton } from "./styled";
 import {
     ClearButton,
     FilterActiveBadge,
@@ -80,6 +81,7 @@ interface ProcessFiltersProps {
     hasActiveFilters: boolean;
     activeFilterCount: number;
     onClearFilters: () => void;
+    onAdd: () => void;
 }
 
 /* ─── Componente ────────────────────────────────────────── */
@@ -91,7 +93,7 @@ export default function ProcessFilters({
     selectedStatuses, onToggleStatus,
     selectedTipos, onToggleTipo,
     filtersOpen, onToggleFilters,
-    hasActiveFilters, activeFilterCount, onClearFilters,
+    hasActiveFilters, activeFilterCount, onClearFilters, onAdd,
 }: ProcessFiltersProps) {
     return (
         <>
@@ -141,6 +143,13 @@ export default function ProcessFilters({
                         {hasActiveFilters && (
                             <ClearButton onClick={onClearFilters}>Limpar</ClearButton>
                         )}
+
+                        <AddButton onClick={onAdd}>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
+                            </svg>
+                            Adicionar PCDT
+                        </AddButton>
                     </SearchAndFilterRow>
                 </RightControls>
             </ControlsCard>
