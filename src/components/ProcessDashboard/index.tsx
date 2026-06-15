@@ -10,7 +10,7 @@ import ProcessTable from "@/components/ProcessTable";
 import ProcessFilters from "@/components/ProcessFilters";
 import ProcessAddModal from "@/components/ProcessAddModal";
 import {
-    ControlsWrapper, MiniChip, MiniCount, MiniLabelFull, MiniLabelShort,
+    AddCard, MiniAddButton, ControlsWrapper, MiniChip, MiniCount, MiniLabelFull, MiniLabelShort,
     MiniSummaryBar, PageWrapper, SummaryRow,
 } from "./styled";
 
@@ -44,15 +44,6 @@ function IconXCircle() {
     );
 }
 
-function IconPlusCircle() {
-    return (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="10" />
-            <line x1="12" y1="8" x2="12" y2="16" /><line x1="8" y1="12" x2="16" y2="12" />
-        </svg>
-    );
-}
-
 /* ─── Utilidade ─────────────────────────────────────────── */
 
 function normalize(str: string) {
@@ -68,7 +59,8 @@ function normalizeNup(str: string) {
 export default function ProcessDashboard() {
     const [processes, setProcesses] = useState<Process[]>(mockProcesses);
     const [collapsed, setCollapsed] = useState(false);
-    const summaryRef = useRef<HTMLDivElement>(null);
+    const summaryRef  = useRef<HTMLDivElement>(null);
+    const miniBarRef  = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         try {
@@ -97,10 +89,18 @@ export default function ProcessDashboard() {
     }, []);
 
     useEffect(() => {
-        document.documentElement.style.setProperty(
-            '--controls-offset',
-            collapsed ? '44px' : '0px'
-        );
+        const el = miniBarRef.current;
+        if (!el) return;
+        const update = () => {
+            document.documentElement.style.setProperty(
+                '--controls-offset',
+                collapsed ? `${el.offsetHeight}px` : '0px'
+            );
+        };
+        update();
+        const ro = new ResizeObserver(update);
+        ro.observe(el);
+        return () => ro.disconnect();
     }, [collapsed]);
     const [searchNup,     setSearchNup]     = useState('');
     const [searchAssunto, setSearchAssunto] = useState('');
@@ -175,13 +175,10 @@ export default function ProcessDashboard() {
     const total       = processes.length;
     const finalizados = processes.filter((p) => p.status === 'Finalizado').length;
     const sobrestados = processes.filter((p) => p.status === 'Sobrestado').length;
-    const novos       = processes.filter((p) => p.tipo === 'novo').length;
-
     const miniItems = [
         { label: "Total",  fullLabel: "Total",        count: total,       color: "#9e9e9e" },
         { label: "Final.", fullLabel: "Finalizados",  count: finalizados, color: "#34a853" },
         { label: "Sobr.",  fullLabel: "Sobrestados",  count: sobrestados, color: "#f57c00" },
-        { label: "Novos",  fullLabel: "Novos PCDTs",  count: novos,       color: "#1a73e8" },
     ];
 
     return (
@@ -190,11 +187,17 @@ export default function ProcessDashboard() {
                 <SummaryCard label="Total de Processos" count={total}       sublabel="registros cadastrados"    borderColor="#9e9e9e" icon={<IconDatabase />}    />
                 <SummaryCard label="Finalizados"         count={finalizados} sublabel="publicados / encerrados"  borderColor="#34a853" icon={<IconCheckCircle />} />
                 <SummaryCard label="Sobrestados"          count={sobrestados} sublabel="sobrestados / aguardando" borderColor="#f57c00" icon={<IconXCircle />}     />
-                <SummaryCard label="Novos PCDTs"         count={novos}       sublabel="elaboração inicial"       borderColor="#1a73e8" icon={<IconPlusCircle />}  />
+                <AddCard onClick={() => setAddOpen(true)}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="16" /><line x1="8" y1="12" x2="16" y2="12" />
+                    </svg>
+                    <span>Adicionar PCDT</span>
+                </AddCard>
             </SummaryRow>
 
             <ControlsWrapper>
-            <MiniSummaryBar $visible={collapsed}>
+            <MiniSummaryBar ref={miniBarRef} $visible={collapsed}>
                 {miniItems.map(({ label, fullLabel, count, color }) => (
                     <MiniChip key={label} $color={color}>
                         <MiniCount $color={color}>{count}</MiniCount>
@@ -202,6 +205,14 @@ export default function ProcessDashboard() {
                         <MiniLabelShort>{label}</MiniLabelShort>
                     </MiniChip>
                 ))}
+                <MiniAddButton onClick={() => setAddOpen(true)}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="16" /><line x1="8" y1="12" x2="16" y2="12" />
+                    </svg>
+                    <MiniLabelFull>Adicionar PCDT</MiniLabelFull>
+                    <MiniLabelShort>Adicionar</MiniLabelShort>
+                </MiniAddButton>
             </MiniSummaryBar>
             <ProcessFilters
                 searchNup={searchNup}
@@ -219,7 +230,6 @@ export default function ProcessDashboard() {
                 hasActiveFilters={hasActiveFilters}
                 activeFilterCount={activeFilterCount}
                 onClearFilters={clearFilters}
-                onAdd={() => setAddOpen(true)}
             />
 
             {addOpen && (
