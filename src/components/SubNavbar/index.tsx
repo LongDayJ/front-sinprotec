@@ -12,7 +12,13 @@ export default function SubNavbar() {
     useEffect(() => {
         const handleScroll = () => {
             const currentY = window.scrollY;
-            setVisible(currentY <= 0);
+            if (currentY <= 0) {
+                setVisible(true);
+            // } else if (currentY < lastScrollY.current) {
+            //     setVisible(true);
+            } else if (currentY > 80) {
+                setVisible(false);
+            }
             lastScrollY.current = currentY;
         };
         window.addEventListener("scroll", handleScroll, { passive: true });

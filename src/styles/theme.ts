@@ -1,4 +1,4 @@
-export const themeVerdeClaro = {
+export const theme = {
     colors: {
         greenDark: "#1b3a28",
         greenBackground: "#2e7d52",

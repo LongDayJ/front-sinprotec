@@ -135,11 +135,18 @@ export default function ProcessDashboard() {
         if (!el) return;
         const observer = new IntersectionObserver(
             ([entry]) => setCollapsed(!entry.isIntersecting),
-            { threshold: 0 }
+            { threshold: 0.1 }
         );
         observer.observe(el);
         return () => observer.disconnect();
     }, []);
+
+    useEffect(() => {
+        document.documentElement.style.setProperty(
+            '--controls-offset',
+            collapsed ? '44px' : '0px'
+        );
+    }, [collapsed]);
     const [searchNup,     setSearchNup]     = useState('');
     const [searchAssunto, setSearchAssunto] = useState('');
     const [searchObs,     setSearchObs]     = useState('');

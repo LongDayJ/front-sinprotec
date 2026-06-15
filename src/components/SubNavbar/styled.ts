@@ -6,7 +6,7 @@ export const SubNavbarWrapper = styled.div<{ $visible: boolean }>`
     z-index: 40;
     overflow: hidden;
     max-height: ${({ $visible }) => ($visible ? "60px" : "0px")};
-    transition: max-height 0.25s ease;
+    transition: max-height 0.15s ease;
 `;
 
 export const SubNavbarContainer = styled.nav`

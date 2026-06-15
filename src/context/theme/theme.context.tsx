@@ -2,7 +2,7 @@
 
 import { ReactNode, useEffect } from "react";
 import { ThemeProvider } from "styled-components";
-import { themeVerdeClaro } from "@/styles/theme.verdeClaro";
+import { theme } from "@/styles/theme";
 
 function flattenObject(obj: Record<string, unknown>, prefix = ""): Record<string, string> {
     return Object.entries(obj).reduce((acc, [key, val]) => {
@@ -18,14 +18,14 @@ function flattenObject(obj: Record<string, unknown>, prefix = ""): Record<string
 
 export function ThemeContextProvider({ children }: { children: ReactNode }) {
     useEffect(() => {
-        const flat = flattenObject(themeVerdeClaro as unknown as Record<string, unknown>, "theme");
+        const flat = flattenObject(theme as unknown as Record<string, unknown>, "theme");
         Object.entries(flat).forEach(([key, val]) => {
             document.documentElement.style.setProperty(`--${key}`, val);
         });
     }, []);
 
     return (
-        <ThemeProvider theme={themeVerdeClaro}>
+        <ThemeProvider theme={theme}>
             {children}
         </ThemeProvider>
     );

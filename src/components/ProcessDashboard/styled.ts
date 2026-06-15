@@ -23,7 +23,10 @@ export const SummaryRow = styled.div<{ $collapsed?: boolean }>`
     opacity: ${({ $collapsed }) => ($collapsed ? 0 : 1)};
     overflow: hidden;
     margin-bottom: ${({ $collapsed }) => ($collapsed ? '-1.25rem' : '0')};
-    transition: max-height 0.35s ease, opacity 0.25s ease, margin-bottom 0.35s ease;
+    transition: ${({ $collapsed }) =>
+        $collapsed
+            ? 'max-height 0.35s ease, opacity 0.25s ease, margin-bottom 0.35s ease'
+            : 'max-height 0.15s ease, opacity 0.1s ease, margin-bottom 0.15s ease'};
 
     @media (max-width: 1024px) {
         grid-template-columns: repeat(2, 1fr);
@@ -32,15 +35,21 @@ export const SummaryRow = styled.div<{ $collapsed?: boolean }>`
 `;
 
 export const MiniSummaryBar = styled.div<{ $visible: boolean }>`
+    position: fixed;
+    top: var(--topbar-height, 56px);
+    left: 0;
+    right: 0;
+    z-index: 35;
     display: flex;
+    align-items: center;
     gap: 0.5rem;
-    padding: ${({ $visible }) => ($visible ? '0.5rem 1rem' : '0')};
-    max-height: ${({ $visible }) => ($visible ? '52px' : '0')};
-    opacity: ${({ $visible }) => ($visible ? 1 : 0)};
-    overflow: hidden;
+    padding: 0.6rem 2.5rem;
     background: #fff;
     border-bottom: 1px solid #e8ecf0;
-    transition: max-height 0.35s ease, opacity 0.25s ease, padding 0.35s ease;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    opacity: ${({ $visible }) => ($visible ? 1 : 0)};
+    pointer-events: ${({ $visible }) => ($visible ? 'auto' : 'none')};
+    transition: opacity 0.15s ease;
 `;
 
 export const MiniChip = styled.div<{ $color: string }>`
@@ -88,8 +97,9 @@ export const ControlsWrapper = styled.div`
     display: flex;
     flex-direction: column;
     position: sticky;
-    top: var(--topbar-height, 56px);
+    top: calc(var(--topbar-height, 56px) + var(--controls-offset, 0px));
     z-index: 40;
+    transition: top 0.15s ease;
 `;
 
 export const ControlsCard = styled.div<{ $filtersOpen: boolean }>`
